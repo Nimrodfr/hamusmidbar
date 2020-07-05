@@ -1,16 +1,21 @@
 version: 2.1
+
+orbs:
+  python: circleci/python@0.2.1
+
 jobs:
-  build-and-deploy:
-    machine: 
-      image: ubuntu-1604:201903-01
+  build-and-test:
+    executor: python/default
     steps:
-    - checkout
-    - run:
-        command: |
-            docker build -t $DOCKER_LOGIN/$IMAGE_NAME -t $DOCKER_LOGIN/$IMAGE_NAME:$CIRCLE_BUILD_NUM-$CIRCLE_BRANCH .
-            echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-            docker push $DOCKER_LOGIN/$IMAGE_NAME
+      - checkout
+      - python/load-cache
+      - python/install-deps
+      - python/save-cache
+      - run:
+          command: ./manage.py test
+          name: Test
+
 workflows:
-  build-and-deploy:
+  main:
     jobs:
-      - build-and-deploy 
+      - build-and-test
