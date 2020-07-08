@@ -1,12 +1,14 @@
 
 
-from flask import Flask, request
+from flask import Flask, request 
+import os 
 app = Flask(__name__)
 
 import pymysql
 def insert_data(hi1, hi2):
-     connection = pymysql.connect(host="localhost", user="root", passwd="password", database="hamus")
+     connection = pymysql.connect(host=os.getenv('d_host'), user="root", passwd="password", database="hamus")
      cursor = connection.cursor()
+     cursor.execute("CREATE TABLE IF NOT EXISTS users2(name varchar(20), ip varchar(30))")
      sql = "INSERT INTO users2 (name, ip) VALUES (%s, %s)"
      val = (hi1, hi2) 
      cursor.execute(sql, val)
@@ -32,6 +34,8 @@ def hamus_turkey():
     return "very good"
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=80)
+
+
 
 
