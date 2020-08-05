@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  build-and-deploy:
+  build:
     machine: 
       image: ubuntu-1604:201903-01
     steps:
@@ -10,11 +10,6 @@ jobs:
             docker build -t $DOCKER_LOGIN/$IMAGE_NAME -t $DOCKER_LOGIN/$IMAGE_NAME:$CIRCLE_BUILD_NUM-$CIRCLE_BRANCH .
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
             docker push $DOCKER_LOGIN/$IMAGE_NAME
-workflows:
-  build-and-deploy:
-    jobs:
-      - build-and-deploy
-jobs:
   deploy:
     docker:
       - image: google/cloud-sdk
@@ -23,3 +18,8 @@ jobs:
           echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
           gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
           gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+workflows:
+ build and deploy:
+   jobs:
+      - build
+      - deploy      
