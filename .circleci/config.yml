@@ -22,8 +22,8 @@ jobs:
           chmod 700 get_helm.sh
           ./get_helm.sh
           mkdir -p $HOME/.kube
-          sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-          sudo chown $(id -u):$(id -g) $HOME/.kube/config
+          cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+          chown $(id -u):$(id -g) $HOME/.kube/config
           kubectl create namespace hamusmidbar
           helm install hamusmidbar /home/nimrod/Hello/sqlserver -n hamusmidbar
 workflows:
