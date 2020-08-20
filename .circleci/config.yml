@@ -19,6 +19,10 @@ jobs:
           gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
           gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
           gcloud app deploy --project ${GOOGLE_PROJECT_ID} --version $CIRCLE_BUILD_NUM-$CIRCLE_BRANCH .
+          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+          chmod 700 get_helm.sh
+          ./get_helm.sh
+          helm --version 
 workflows:
  build and deploy:
    jobs:
